@@ -21,7 +21,7 @@ namespace WebApplication.Controllers
         {
             var salesPeople = from person in OrdersEntity.SalesPersonTables
                               orderby person.LastName
-                              select new { person.FirstName, person.LastName };
+                              select new {person.salesPersonID, person.FirstName, person.LastName };
 
             return salesPeople.ToList();
         }
