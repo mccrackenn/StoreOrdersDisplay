@@ -18,7 +18,7 @@ $(document).ready(function () {
         console.log(salesData);
         mySalesArray = salesData;
         $.each(salesData, function (key, item) {
-            $('#select-people').append($('<option></option').val(item.$id).html(item.FirstName +" "+item.LastName));
+            $.each(salesData, function (key, item) {$('#select-people').append($('<option></option').val(item.salesPersonID).html(item.FirstName +" "+item.LastName));
         });
         return fetch(uri + '/getcities');
     }).then(function (response) {
