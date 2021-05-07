@@ -31,7 +31,7 @@ $(document).ready(function () {
         myCityArray = cityData;
         console.log(cityData);
         $.each(cityData, function (key, item) {
-            $('#select-cities').append($('<option></option').val(item.$id).html(item.City));
+            $('#select-cities').append($('<option></option').val(item.storeID).html(item.City));
         });
     })
 });
