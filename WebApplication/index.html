@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    <div>
+    <div class="container p-3 my-3 bg-info text-important">
         <h5>Which Stores are selling CDs for better markups? (price more than $13)</h5>
         <input type="button" value="Submit" class="btn-primary" onclick="GetMarkups()" />
 
@@ -18,11 +18,25 @@
         </div>
     </div>
 
-    <label for="select-people">Sales People</label>
-    <select name="select-people" class="form-control" id="select-people"></select>
+    <div class="container p-3 my-3 bg-light text-info">
+        <br />
+        <h5>I want to check on the performance of an employee</h5>
+        <h6>Will show the total amount sold for a salesperson for the entire year</h6>
 
-    <label for="select-cities">Cities</label>
-    <select name="select-cities" class="form-control" id="select-cities"></select>
+        <select name="select-people" class="form-control" id="select-people"></select>
+        <label for="select-people">Choose an Employee</label>
+        <button id="emp" onclick="GetEmp()"class="btn-primary">GetEmp</button>
+        <p id="employee-annual"></p>
+    </div>
+
+    <div class="container p-3 my-3 bg-info text-important">
+        <h5>I want to see the performance of my stores</h5>
+
+        <select name="select-cities" class="form-control" id="select-cities"></select>
+        <label for="select-cities">Choose Store</label>
+        <button id="city" onclick="GetCity()" class="btn-primary">GetCity</button>
+        <p id="city-annual"></p>
+    </div>
 
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
     <script src="Scripts/main.js"></script>

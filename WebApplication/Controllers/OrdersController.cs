@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Web.Http;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using RoutePrefixAttribute = System.Web.Http.RoutePrefixAttribute;
+using System.Diagnostics;
 
 namespace WebApplication.Controllers
 {
@@ -21,7 +22,7 @@ namespace WebApplication.Controllers
         {
             var salesPeople = from person in OrdersEntity.SalesPersonTables
                               orderby person.LastName
-                              select new { person.FirstName, person.LastName };
+                              select new {person.salesPersonID, person.FirstName, person.LastName };
 
             return salesPeople.ToList();
         }
@@ -32,7 +33,7 @@ namespace WebApplication.Controllers
         {
             var cities = from city in OrdersEntity.StoreTables
                          orderby city.City
-                         select new { city.City };
+                         select new {city.storeID, city.City };
 
             return cities.ToList();
         }
@@ -50,5 +51,62 @@ namespace WebApplication.Controllers
 
             return grouped.ToList();
         }
+
+        [System.Web.Http.Route("GetEmployeeSales")]
+        [HttpGet]
+        public IHttpActionResult GetEmployeeSales(string empID)
+        {
+            int myInt = Int32.Parse(empID);
+            try
+            {
+                var empSalesSum = (from a in OrdersEntity.Orders
+                                   where a.salesPersonID == myInt
+                                   select (int?)a.pricePaid).Sum()?? 0;
+
+                return Ok(empSalesSum);
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
+                    }
+                }
+                return NotFound();
+            }
+
+        }
+
+        [System.Web.Http.Route("GetCitySales")]
+        [HttpGet]
+
+        public IHttpActionResult GetCitySales(string cityID)
+        {
+            try
+            {
+                int myInt = Int32.Parse(cityID);
+                var citySalesSum = (from a in OrdersEntity.Orders
+                                    where a.storeID == myInt
+                                    select (int?)a.pricePaid).Sum() ?? 0;
+
+                return Ok(citySalesSum);
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
+                    }
+                }
+                return NotFound();
+            }
+
+        }
+
     }
 }

@@ -17,8 +17,7 @@ $(document).ready(function () {
     }).then(function (salesData) {
         console.log(salesData);
         mySalesArray = salesData;
-        $.each(salesData, function (key, item) {
-            $('#select-people').append($('<option></option').val(item.$id).html(item.FirstName +" "+item.LastName));
+        $.each(salesData, function (key, item) {$('#select-people').append($('<option></option').val(item.salesPersonID).html(item.FirstName +" "+item.LastName));
         });
         return fetch(uri + '/getcities');
     }).then(function (response) {
@@ -31,12 +30,48 @@ $(document).ready(function () {
         myCityArray = cityData;
         console.log(cityData);
         $.each(cityData, function (key, item) {
-            $('#select-cities').append($('<option></option').val(item.$id).html(item.City));
+            $('#select-cities').append($('<option></option').val(item.storeID).html(item.City));
         });
     })
+
 });
 
+GetEmp = () => {
+    $('#employee-annual').empty();
+    let empValue = $('#select-people').val();
+    empValue = parseInt(empValue);
+    console.log(empValue);
+    fetch(uri + '/GetEmployeeSales?empID=' + empValue).then(function (response) {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return Promise.reject(response);
+        }
+    }).then((sumData) => {
+        console.log(sumData);
+        $('#employee-annual').append("For the year, this Employee has sold: $"+sumData)
+    })
+}
+
+GetCity = () => {
+    $('#city-annual').empty();
+    let cityValue = $('#select-cities').val();
+    
+    console.log(cityValue);
+    fetch(uri + '/GetCitySales?cityID=' + cityValue).then(function (response) {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return Promise.reject(response);
+        }
+    }).then((sumData) => {
+        console.log(sumData);
+        $('#city-annual').append("This Store has sold: $" + sumData)
+    })
+}
+
 GetMarkups = () => {
+    $('#markup-list').empty();
     fetch(uri + '/getmarkupresults').then(function (response) {
         if (response.ok) {
             return response.json();
@@ -55,7 +90,9 @@ GetMarkups = () => {
 
         });
     })
+
 }
+
 mySort = (anArray) => {
     anArray.sort(function (a, b) {
         if (a.length < b.length) return 1;
