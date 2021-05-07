@@ -32,7 +32,7 @@ namespace WebApplication.Controllers
         {
             var cities = from city in OrdersEntity.StoreTables
                          orderby city.City
-                         select new { city.City };
+                         select new { city.storeID, city.City };
 
             return cities.ToList();
         }
